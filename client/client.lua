@@ -32,7 +32,7 @@ AddEventHandler('muhaddil_insurances:Notify', function(msgtitle, msg, time, type
 end)
 
 -- -------------------------------------------------------------------
---  1) /pedirrobo 
+--  1) /pedirrobo
 -- -------------------------------------------------------------------
 RegisterCommand('pedirrobo', function()
     lib.callback('muhaddil_robbery:getRobberies', false, function(robberyList)
@@ -162,7 +162,8 @@ RegisterNetEvent('muhaddil_robbery:showAllRobberies', function(listado)
     for _, entry in ipairs(listado) do
         local labelEstado = "[" .. string.upper(entry.status) .. "]"
         local titulo      = labelEstado .. " " .. entry.thiefName
-        local descripcion = locale('robbery_id', entry.id) .. "\n" .. locale('robbery_date', entry.timeFormatted) .. "\n" .. locale('robbery_type', entry.robberyType)
+        local descripcion = locale('robbery_id', entry.id) ..
+        "\n" .. locale('robbery_date', entry.timeFormatted) .. "\n" .. locale('robbery_type', entry.robberyType)
         if entry.status ~= "pendiente" and entry.decidedByName then
             descripcion = descripcion .. "\n" .. locale('robbery_decided_by', entry.decidedByName)
         end
@@ -225,3 +226,35 @@ end)
 
 -- Example
 -- $.post('https://muhaddil_robberydispo/openRobberiesMenu', JSON.stringify({}));
+
+RegisterNUICallback('openAksRobberiesMenu', function(data, cb)
+    lib.callback('muhaddil_robbery:getRobberies', false, function(robberyList)
+        local options = {}
+
+        for _, robbery in ipairs(robberyList) do
+            table.insert(options, {
+                title = robbery.label,
+                disabled = robbery.disabled,
+                icon = robbery.disabled and 'x' or 'check',
+                onSelect = function()
+                    if not robbery.disabled then
+                        TriggerServerEvent('muhaddil_robbery:requestRobbery', robbery.value)
+                    end
+                end
+            })
+        end
+
+        lib.registerContext({
+            id = 'pedirrobo_menu',
+            title = locale('robbery_menu_title'),
+            options = options
+        })
+
+        lib.showContext('pedirrobo_menu')
+    end)
+
+    cb('ok')
+end)
+
+-- Example
+-- $.post('https://muhaddil_robberydispo/openAksRobberiesMenu', JSON.stringify({}));

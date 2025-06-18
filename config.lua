@@ -1,6 +1,7 @@
 Config = {}
 
 Config.FrameWork = 'esx' -- Select the framework being used: 'esx' for ESX Framework or 'qb' for QBCore Framework.
+Config.UseOXNotifications = true -- Enable or disable the use of OxNotifications for notifications.
 Config.AutoExpire = 5 -- Time in minutes after which a robbery request will automatically expire if not accepted.
 Config.policejobs = {"sheriff", "police"} -- List of police jobs that can respond to robberies.
 Config.AutoVersionChecker = true -- Enable or disable the automatic version checker.

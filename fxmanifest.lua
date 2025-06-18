@@ -4,7 +4,7 @@ lua54 'yes'
 
 author 'Muhaddil'
 description 'Simple robbery disponibility script for FiveM'
-version 'v1.0.2'
+version 'v1.0.21'
 
 client_script 'client/*'
 server_script {
@@ -19,9 +19,4 @@ shared_script {
 
 files {
     'locales/*.json'
-}
-
-escrow_ignore {
-    'locales/*.json',
-    'config.lua',
 }

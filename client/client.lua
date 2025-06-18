@@ -26,8 +26,8 @@ local function Notify(msgtitle, msg, time, type2)
     end
 end
 
-RegisterNetEvent('muhaddil_insurances:Notify')
-AddEventHandler('muhaddil_insurances:Notify', function(msgtitle, msg, time, type)
+RegisterNetEvent('muhaddil_robberydispo:Notify')
+AddEventHandler('muhaddil_robberydispo:Notify', function(msgtitle, msg, time, type)
     Notify(msgtitle, msg, time, type)
 end)
 

@@ -94,7 +94,7 @@ end)
 RegisterNetEvent('muhaddil_robbery:requestRobbery', function(robberyName) 
     local src = source
     if type(robberyName) ~= "string" then
-        TriggerClientEvent('muhaddil_insurances:Notify', src, locale('robbery_error'), locale('robbery_invalid'), 5000, "error")
+        TriggerClientEvent('muhaddil_robberydispo:Notify', src, locale('robbery_error'), locale('robbery_invalid'), 5000, "error")
         return
     end
 
@@ -107,13 +107,13 @@ RegisterNetEvent('muhaddil_robbery:requestRobbery', function(robberyName)
     end
 
     if not chosen then
-        TriggerClientEvent('muhaddil_insurances:Notify', src, locale('robbery_error'), locale('robbery_not_found'), 5000, "error")
+        TriggerClientEvent('muhaddil_robberydispo:Notify', src, locale('robbery_error'), locale('robbery_not_found'), 5000, "error")
         return
     end
 
     local persistentId = GetPlayerPersistentIdentifier(src)
     if not persistentId then
-        TriggerClientEvent('muhaddil_insurances:Notify', src, locale('robbery_error'), locale('robbery_identifier_not_found'), 5000, "error")
+        TriggerClientEvent('muhaddil_robberydispo:Notify', src, locale('robbery_error'), locale('robbery_identifier_not_found'), 5000, "error")
         return
     end
 
@@ -143,7 +143,7 @@ RegisterNetEvent('muhaddil_robbery:requestRobbery', function(robberyName)
         serverId            = src
     }
 
-    TriggerClientEvent('muhaddil_insurances:Notify', src, locale('robbery_sent'),
+    TriggerClientEvent('muhaddil_robberydispo:Notify', src, locale('robbery_sent'),
         (locale('robbery_sent_desc')):format(insertId, chosen.name),
         5000, "info")
 
@@ -176,7 +176,7 @@ RegisterNetEvent('muhaddil_robbery:requestRobbery', function(robberyName)
                 insertId
             })
             if req.serverId and GetPlayerName(req.serverId) then
-                TriggerClientEvent('muhaddil_insurances:Notify', req.serverId,
+                TriggerClientEvent('muhaddil_robberydispo:Notify', req.serverId,
                     locale('robbery_auto_rejected'),
                     (locale('robbery_auto_rejected_desc')):format(insertId, req.robberyType),
                     5000, "error")
@@ -218,7 +218,7 @@ RegisterNetEvent('muhaddil_robbery:responseFromPolice', function(targetRequestId
         })
 
         if req.serverId and GetPlayerName(req.serverId) then
-            TriggerClientEvent('muhaddil_insurances:Notify', req.serverId,
+            TriggerClientEvent('muhaddil_robberydispo:Notify', req.serverId,
                 "Aprobado",
                 "Tu solicitud #" .. targetRequestId .. " fue ACEPTADA por " .. policeName .. ".",
                 5000, "success")
@@ -240,13 +240,13 @@ RegisterNetEvent('muhaddil_robbery:responseFromPolice', function(targetRequestId
         })
 
         if req.serverId and GetPlayerName(req.serverId) then
-            TriggerClientEvent('muhaddil_insurances:Notify', req.serverId,
+            TriggerClientEvent('muhaddil_robberydispo:Notify', req.serverId,
                 "Rechazado",
                 "Tu solicitud #" .. targetRequestId .. " fue RECHAZADA por " .. policeName .. ".",
                 5000, "error")
         end
 
-        TriggerClientEvent('muhaddil_insurances:Notify', src,
+        TriggerClientEvent('muhaddil_robberydispo:Notify', src,
             "Rechazaste",
             "Has rechazado la solicitud #" .. targetRequestId .. ".",
             5000, "info")

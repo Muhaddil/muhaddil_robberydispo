@@ -74,6 +74,40 @@ local function CountCopsByJobs(jobs)
     return policeCount
 end
 
+local function GetOnDutyCops(jobs)
+    local cops = {}
+
+    for _, job in ipairs(jobs) do
+        if Config.Framework == 'esx' or Config.Framework == 'newesx' then
+            if GetResourceState("origen_police") ~= "missing" then
+                local playersReady = exports['origen_police']:GetPlayersReadyByJob(job, true)
+                for playerId, _ in pairs(playersReady) do
+                    table.insert(cops, tonumber(playerId))
+                end
+            else
+                local playersInDuty = ESX.GetExtendedPlayers("job", job)
+                for _, xPlayer in ipairs(playersInDuty) do
+                    table.insert(cops, xPlayer.source)
+                end
+            end
+        else
+            if GetResourceState("origen_police") ~= "missing" then
+                local playersReady = exports['origen_police']:GetPlayersReadyByJob(job, true)
+                for playerId, _ in pairs(playersReady) do
+                    table.insert(cops, tonumber(playerId))
+                end
+            else
+                local playersOnDuty = QBCore.Functions.GetPlayersOnDuty(job)
+                for _, playerId in ipairs(playersOnDuty) do
+                    table.insert(cops, playerId)
+                end
+            end
+        end
+    end
+
+    return cops
+end
+
 lib.callback.register('muhaddil_robbery:getRobberies', function(source)
     local policeJobs = Config.policejobs
     local policeCount = CountCopsByJobs(policeJobs)
@@ -91,10 +125,11 @@ lib.callback.register('muhaddil_robbery:getRobberies', function(source)
     return robberyList
 end)
 
-RegisterNetEvent('muhaddil_robbery:requestRobbery', function(robberyName) 
+RegisterNetEvent('muhaddil_robbery:requestRobbery', function(robberyName)
     local src = source
     if type(robberyName) ~= "string" then
-        TriggerClientEvent('muhaddil_robberydispo:Notify', src, locale('robbery_error'), locale('robbery_invalid'), 5000, "error")
+        TriggerClientEvent('muhaddil_robberydispo:Notify', src, locale('robbery_error'), locale('robbery_invalid'), 5000,
+            "error")
         return
     end
 
@@ -107,13 +142,15 @@ RegisterNetEvent('muhaddil_robbery:requestRobbery', function(robberyName)
     end
 
     if not chosen then
-        TriggerClientEvent('muhaddil_robberydispo:Notify', src, locale('robbery_error'), locale('robbery_not_found'), 5000, "error")
+        TriggerClientEvent('muhaddil_robberydispo:Notify', src, locale('robbery_error'), locale('robbery_not_found'),
+            5000, "error")
         return
     end
 
     local persistentId = GetPlayerPersistentIdentifier(src)
     if not persistentId then
-        TriggerClientEvent('muhaddil_robberydispo:Notify', src, locale('robbery_error'), locale('robbery_identifier_not_found'), 5000, "error")
+        TriggerClientEvent('muhaddil_robberydispo:Notify', src, locale('robbery_error'),
+            locale('robbery_identifier_not_found'), 5000, "error")
         return
     end
 
@@ -146,6 +183,14 @@ RegisterNetEvent('muhaddil_robbery:requestRobbery', function(robberyName)
     TriggerClientEvent('muhaddil_robberydispo:Notify', src, locale('robbery_sent'),
         (locale('robbery_sent_desc')):format(insertId, chosen.name),
         5000, "info")
+
+    local copsToNotify = GetOnDutyCops(Config.policejobs)
+    for _, copId in ipairs(copsToNotify) do
+        TriggerClientEvent('muhaddil_robberydispo:Notify', copId,
+            locale('robbery_alert_title'),
+            (locale('robbery_alert_desc')):format(insertId, chosen.name, playerName),
+            15000, "info")
+    end
 
     local filasParaEliminar = MySQL.query.await([[
         SELECT id

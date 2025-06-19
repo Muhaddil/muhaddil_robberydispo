@@ -14,8 +14,9 @@ local function Notify(msgtitle, msg, time, type2)
         lib.notify({
             title        = msgtitle,
             description  = msg,
+            duration = time or 5000,
             showDuration = true,
-            type         = type2,
+            type         = type2 or "info",
         })
     else
         if Config.FrameWork == 'qb' then

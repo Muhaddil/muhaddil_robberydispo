@@ -54,5 +54,7 @@
   "version_error_json": "[muhaddil_robberydispo] - Error: La estructura JSON no es la esperada.",
   "version_error_response": "Respuesta de la API de GitHub: %s",
   "version_error_status": "[muhaddil_robberydispo] - Error al comprobar la última versión. Código de estado: %s",
-  "version_error_github": "[muhaddil_robberydispo] - Puede que GitHub esté teniendo problemas"
+  "version_error_github": "[muhaddil_robberydispo] - Puede que GitHub esté teniendo problemas",
+  "robbery_alert_title": "Alerta de Robo",
+  "robbery_alert_desc": "Nueva solicitud de robo (#%d) tipo '%s' enviada por %s."
 }

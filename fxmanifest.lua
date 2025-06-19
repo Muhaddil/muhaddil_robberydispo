@@ -4,7 +4,7 @@ lua54 'yes'
 
 author 'Muhaddil'
 description 'Simple robbery disponibility script for FiveM'
-version 'v1.0.21'
+version 'v1.0.3'
 
 client_script 'client/*'
 server_script {
